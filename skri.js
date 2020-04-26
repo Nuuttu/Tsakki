@@ -1,7 +1,9 @@
+var aakkoset = ["A","B","C","D","E","F","G","H"];
+
 function alustus(){
     var lauta = document.getElementById("alusta");
     var ruudut = "";
-    var aakkoset = ["A","B","C","D","E","F","G","H"];
+   
 
     ruudut += "<table id='lauta'>";
     for (i=8; i>0; i--){
@@ -10,9 +12,9 @@ function alustus(){
         for (j=1; j<9; j++){
             ruudut += "<td"
             if(j%2 == 0 && i%2 != 0 || j%2 != 0 && i%2 == 0){
-                ruudut+= " class='musta'>";
+                ruudut+= " class='valkoinen'>";
             }else{
-                ruudut +=" class='valkoinen'>";
+                ruudut +=" class='musta'>";
             }
             ruudut += aakkoset[j-1] + ""+ i +"</td>";
         }
@@ -25,5 +27,31 @@ function alustus(){
         ruudut += "</tr>";
     ruudut += "</table>";
     lauta.innerHTML = ruudut;
-   console.log(ruudut);
+  
 }
+
+function alustus2(){
+    var lauta2 = document.getElementById("alusta2");
+    var ruudut2 ="";
+    var ruutuid = 1;
+    
+    for (i=1; i<9; i++){
+        ruudut2 += "<div class='rivi'>";
+        for (j=1; j<9; j++){
+            ruudut2 += "<div class='laatikko "
+            if(j%2 == 0 && i%2 != 0 || j%2 != 0 && i%2 == 0){
+                ruudut2 += "musta'";
+            }else{
+                ruudut2 +="valkoinen'";
+            }
+
+            ruudut2 += " id='ruutu"+ruutuid+"'>"+ruutuid+"</div>";
+            ruutuid++;
+        }
+        ruudut2 += "</div>";
+    }
+    
+    
+    lauta2.innerHTML = ruudut2;
+    console.log(ruudut2);
+} 

@@ -6,8 +6,8 @@
 
 #lauta td{
     border: 1px solid black;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
 }
 
 .musta{
@@ -17,8 +17,34 @@
 
 .valkoinen{
     background-color: white;
+    color: black;
 }
 
 .koordinaatti{
     border-style: none;
+}
+
+/* Toinen lauta */
+#alusta2{
+    border: 2px solid black;
+    
+    
+}
+
+#lauta2 td{
+    border: 1px solid black;
+    width: 80px;
+    height: 80px;
+}
+
+.laatikko{
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    text-align: right;
+    vertical-align: bottom;
+}
+
+.rivi{
+    display: block;
 }
