@@ -1,11 +1,20 @@
 #lauta{
     border: 1px solid black;
     border-collapse: collapse;
-    width: 80%;
+    text-align: center;
 }
 
 #lauta td{
     border: 1px solid black;
     width: 100px;
-    height: 10%;
+    height: 100px;
+}
+
+.musta{
+    background-color: black;
+    color: white;
+}
+
+.valkoinen{
+    background-color: white;
 }
