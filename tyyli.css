@@ -1,5 +1,5 @@
 #lauta{
-    border: 1px solid black;
+    
     border-collapse: collapse;
     text-align: center;
 }
@@ -17,4 +17,8 @@
 
 .valkoinen{
     background-color: white;
+}
+
+.koordinaatti{
+    border-style: none;
 }
