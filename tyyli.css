@@ -1,0 +1,11 @@
+#lauta{
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 80%;
+}
+
+#lauta td{
+    border: 1px solid black;
+    width: 100px;
+    height: 10%;
+}
