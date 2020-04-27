@@ -1,5 +1,10 @@
+#alusta{
+    float: unset;
+    width: 740px;
+}
+
 #lauta{
-    
+    float: none;
     border-collapse: collapse;
     text-align: center;
 }
@@ -26,15 +31,28 @@
 
 /* Toinen lauta */
 #alusta2{
+    width: 100%;
+    border: 1px solid yellow;
+    float: left;
+}
+
+#liikkeet{
+   float: right;
+   margin: 5px;
+}
+
+#alustansisys{
     border: 2px solid black;
-    
-    
+    width: 640px;
+    float: inherit;
+}
+
+#alusta2 p{
+    text-decoration: underline;
 }
 
 #lauta2 td{
     border: 1px solid black;
-    width: 80px;
-    height: 80px;
 }
 
 .laatikko{
