@@ -35,6 +35,13 @@ function alustus2(){
     
 } 
 
+function nappulaalustus() {
+    for(i=9; i<=16; i++){
+        document.getElementById("ruutu"+i).innerHTML = "<img src='Druid56.png'></img>";
+    }
+    document.getElementById("ruutu2").innerHTML = "<img src='Druid56.png'></img>";
+}
+
 function liike(ruutu) {
     var liikkeet = document.getElementById("liikkeet");
     liikkeet.innerHTML += " " +ruutu;
