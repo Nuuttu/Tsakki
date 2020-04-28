@@ -65,6 +65,10 @@
     
 }
 
+.laatikko p {
+    float: left;
+}
+
 .nappula{
     background-color: transparent;
     z-index: 1;
