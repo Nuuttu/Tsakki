@@ -1,4 +1,11 @@
 var aakkoset = ["A","B","C","D","E","F","G","H"];
+var xy = [];
+for(i=0; i<8; i++) {
+    xy[i] = [i+1];
+    for( j=0; j<8; j++){
+        xy[i][j] = [j+1];
+    }
+}
 
 function alustus2(){
     var lauta2 = document.getElementById("alustansisys");
@@ -14,9 +21,10 @@ function alustus2(){
             }else{
                 ruudut2 +="valkoinen'";
             }
-
-            ruudut2 += " id='ruutu"+ruutuid+"'>"+ruutuid+"</div>";
+            
+            ruudut2 += " id='ruutu"+ruutuid+"' onclick='liike("+ruutuid+")'>"+ruutuid+"</div>";
             ruutuid++;
+
         }
         ruudut2 += "</div>";
     }
@@ -24,7 +32,14 @@ function alustus2(){
     
     lauta2.innerHTML = ruudut2;
     console.log(ruudut2);
+    
 } 
+
+function liike(ruutu) {
+    var liikkeet = document.getElementById("liikkeet");
+    liikkeet.innerHTML += " " +ruutu;
+}
+
 
 function alustus(){
     var lauta = document.getElementById("alusta");
