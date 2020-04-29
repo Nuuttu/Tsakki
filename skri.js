@@ -1,11 +1,5 @@
 var aakkoset = ["0", "A", "B", "C", "D", "E", "F", "G", "H"];
-var ruutuxy = [];
-for (i = 0; i < 8; i++) {
-    ruutuxy[i] = [i + 1];
-    for (j = 0; j < 8; j++) {
-        ruutuxy[i][j] = [j + 1];
-    }
-}
+
 
 function alustus() {
     var lauta2 = document.getElementById("alustansisys");
@@ -41,12 +35,22 @@ function allowDrop(ev) {
   
   function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
+    console.log(ev.target.id);
+    console.log(document.getElementById(ev.target.id).parentElement.id);
   }
   
   function drop(ev) {
+      
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
     ev.target.appendChild(document.getElementById(data));
+    
+    console.log(ev.dataTransfer.getData("text"));
+    console.log(ev.target.appendChild(document.getElementById(data)));
+    
+    
+    
+    console.log(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id);
   }
 
 function xy(x, y) {
@@ -81,35 +85,35 @@ function r_to_x(r) {
 function nappulaalustus() {
 
     //tornit
-    document.getElementById("ruutu" + xy("a", 8)).innerHTML = "<img src='torni_m.png' draggable='true' ondragstart='drag(event)' id='drag_tm1'></img>";
-    document.getElementById("ruutu" + xy("h", 8)).innerHTML = "<img src='torni_m.png' draggable='true' ondragstart='drag(event)' id='drag_tm2'></img>";
-    document.getElementById("ruutu" + xy("a", 1)).innerHTML = "<img src='torni_v.png' draggable='true' ondragstart='drag(event)' id='drag_tv1'></img>";
-    document.getElementById("ruutu" + xy("h", 1)).innerHTML = "<img src='torni_v.png' draggable='true' ondragstart='drag(event)' id='drag_tv2'></img>";
+    document.getElementById("ruutu" + xy("a", 8)).innerHTML = "<img src='torni_m.png' class='torni' draggable='true' ondragstart='drag(event)' id='drag_tm1'></img>";
+    document.getElementById("ruutu" + xy("h", 8)).innerHTML = "<img src='torni_m.png' class='torni' draggable='true' ondragstart='drag(event)' liike()' id='drag_tm2'></img>";
+    document.getElementById("ruutu" + xy("a", 1)).innerHTML = "<img src='torni_v.png' class='torni' draggable='true' ondragstart='drag(event)' id='drag_tv1'></img>";
+    document.getElementById("ruutu" + xy("h", 1)).innerHTML = "<img src='torni_v.png' class='torni' draggable='true' ondragstart='drag(event)' id='drag_tv2'></img>";
 
     //hepat
-    document.getElementById("ruutu" + xy("b",8)).innerHTML = "<img src='hevonen_m.png' draggable='true' ondragstart='drag(event)' id='drag_hm1'></img>";
-    document.getElementById("ruutu" + xy("g",8)).innerHTML = "<img src='hevonen_m.png' draggable='true' ondragstart='drag(event)' id='drag_hm2'></img>";
-    document.getElementById("ruutu" + xy("b",1)).innerHTML = "<img src='hevonen_v.png' draggable='true' ondragstart='drag(event)' id='drag_hv1'></img>";
-    document.getElementById("ruutu" + xy("g",1)).innerHTML = "<img src='hevonen_v.png' draggable='true' ondragstart='drag(event)' id='drag_hv2'></img>";
+    document.getElementById("ruutu" + xy("b",8)).innerHTML = "<img src='hevonen_m.png' class='hevonen' draggable='true' ondragstart='drag(event)' id='drag_hm1'></img>";
+    document.getElementById("ruutu" + xy("g",8)).innerHTML = "<img src='hevonen_m.png' class='hevonen' draggable='true' ondragstart='drag(event)' id='drag_hm2'></img>";
+    document.getElementById("ruutu" + xy("b",1)).innerHTML = "<img src='hevonen_v.png' class='hevonen' draggable='true' ondragstart='drag(event)' id='drag_hv1'></img>";
+    document.getElementById("ruutu" + xy("g",1)).innerHTML = "<img src='hevonen_v.png' class='hevonen' draggable='true' ondragstart='drag(event)' id='drag_hv2'></img>";
 
     //lähetit
-    document.getElementById("ruutu" + xy("c",8)).innerHTML = "<img src='lahetti_m.png' draggable='true' ondragstart='drag(event)' id='drag_lm1'></img>";
-    document.getElementById("ruutu" + xy("f",8)).innerHTML = "<img src='lahetti_m.png' draggable='true' ondragstart='drag(event)' id='drag_lm2'></img>";
-    document.getElementById("ruutu" + xy("c",1)).innerHTML = "<img src='lahetti_v.png' draggable='true' ondragstart='drag(event)' id='drag_lv1'></img>";
-    document.getElementById("ruutu" + xy("f",1)).innerHTML = "<img src='lahetti_v.png' draggable='true' ondragstart='drag(event)' id='drag_lv2'></img>";
+    document.getElementById("ruutu" + xy("c",8)).innerHTML = "<img src='lahetti_m.png' class='lahetti' draggable='true' ondragstart='drag(event)' id='drag_lm1'></img>";
+    document.getElementById("ruutu" + xy("f",8)).innerHTML = "<img src='lahetti_m.png' class='lahetti' draggable='true' ondragstart='drag(event)' id='drag_lm2'></img>";
+    document.getElementById("ruutu" + xy("c",1)).innerHTML = "<img src='lahetti_v.png' class='lahetti' draggable='true' ondragstart='drag(event)' id='drag_lv1'></img>";
+    document.getElementById("ruutu" + xy("f",1)).innerHTML = "<img src='lahetti_v.png' class='lahetti' draggable='true' ondragstart='drag(event)' id='drag_lv2'></img>";
 
     //kuningas
-    document.getElementById("ruutu" + xy("d", 8)).innerHTML = "<img src='kuningas_m.png' draggable='true' ondragstart='drag(event)' id='drag_km'></img>";
-    document.getElementById("ruutu" + xy(4, 1)).innerHTML = "<img src='kuningas_v.png' draggable='true' ondragstart='drag(event)' id='drag_kv'></img>";
+    document.getElementById("ruutu" + xy("d", 8)).innerHTML = "<img src='kuningas_m.png' class='kuningas' draggable='true' ondragstart='drag(event)' id='drag_km'></img>";
+    document.getElementById("ruutu" + xy(4, 1)).innerHTML = "<img src='kuningas_v.png' class='kuningas' draggable='true' ondragstart='drag(event)' id='drag_kv'></img>";
 
     //kuningatar
-    document.getElementById("ruutu" + xy("e",8)).innerHTML = "<img src='kuningatar_m.png' draggable='true' ondragstart='drag(event)' id='drag_qm'></img>";
-    document.getElementById("ruutu" + xy("e",1)).innerHTML = "<img src='kuningatar_v.png' draggable='true' ondragstart='drag(event)' id='drag_qv'></img>";
+    document.getElementById("ruutu" + xy("e",8)).innerHTML = "<img src='kuningatar_m.png' class='kuningatar' draggable='true' ondragstart='drag(event)' id='drag_qm'></img>";
+    document.getElementById("ruutu" + xy("e",1)).innerHTML = "<img src='kuningatar_v.png' class='kuningatar' draggable='true' ondragstart='drag(event)' id='drag_qv'></img>";
 
     //sotilaat
     for (i = 1; i <= 8; i++) {
-        document.getElementById("ruutu" + xy(i, 7)).innerHTML = "<img src='sotilas_m.png' draggable='true' ondragstart='drag(event)' id='drag_sm" + i + "'></img>";
-        document.getElementById("ruutu" + xy(i, 2)).innerHTML = "<img src='sotilas_v.png' draggable='true' ondragstart='drag(event)' id='drag_sv" + i +"'></img>";
+        document.getElementById("ruutu" + xy(i, 7)).innerHTML = "<img src='sotilas_m.png' class='sotilas' draggable='true' ondragstart='drag(event)' id='drag_sm" + i + "'></img>";
+        document.getElementById("ruutu" + xy(i, 2)).innerHTML = "<img src='sotilas_v.png' class='sotilas' draggable='true' ondragstart='drag(event)' id='drag_sv" + i +"'></img>";
     }
 }
 
