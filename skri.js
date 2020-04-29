@@ -43,6 +43,8 @@ function allowDrop(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
     console.log(ev.target.id);
     console.log(document.getElementById(ev.target.id).parentElement.id);
+      var r = Number(document.getElementById(ev.target.id).parentElement.id.replace('ruutu',''));
+      liikealku(r);
   }
   
   function drop(ev) {
@@ -50,13 +52,14 @@ function allowDrop(ev) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
     ev.target.appendChild(document.getElementById(data));
+
+    var r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu',''));
+      liikeloppu(r);
     
     console.log(ev.dataTransfer.getData("text"));
     console.log(ev.target.appendChild(document.getElementById(data)));
     
-    
-    
-    console.log(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id);
+        console.log(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id);
   }
 
 function xy(x, y) {
@@ -123,12 +126,19 @@ function nappulaalustus() {
     }
 }
 
-function liike(ruutu) {
+function liikealku(ruutu) {
+    
+    var liikkeet = document.getElementById("liikkeet");
+    liikkeet.innerHTML += aakkoset[r_to_x(ruutu)] + "" + r_to_y(ruutu) + " ";
+    console.log(ruutu + " " + r_to_x(ruutu) + " " + r_to_y(ruutu) + " " + xy(r_to_x(ruutu),r_to_y(ruutu)));
+}
+
+function liikeloppu(ruutu) {
+    
     var liikkeet = document.getElementById("liikkeet");
     liikkeet.innerHTML += aakkoset[r_to_x(ruutu)] + "" + r_to_y(ruutu) + "; ";
     console.log(ruutu + " " + r_to_x(ruutu) + " " + r_to_y(ruutu) + " " + xy(r_to_x(ruutu),r_to_y(ruutu)));
 }
-
 
 function alustusvanha() {
     var lauta = document.getElementById("alusta");
