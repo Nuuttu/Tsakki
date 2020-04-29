@@ -69,6 +69,11 @@
     float: left;
 }
 
+.laatikko img{
+    height: 60px;
+    width: 60px;
+}
+
 .nappula{
     background-color: transparent;
     z-index: 1;
