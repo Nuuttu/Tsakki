@@ -63,15 +63,29 @@
     text-align: right;
     vertical-align: middle;
     
+    position: relative;
+    margin: 0;
+    padding: 0;
 }
 
-.laatikko p {
-    float: left;
+.laatikko p{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    position: absolute;
+  bottom: 2px;
+  right: 1px;
+  
 }
 
 .laatikko img{
+    position: relative;
+    display: block;
+    margin: auto;
+    top: 10px;
     height: 60px;
     width: 60px;
+    z-index: 1;
 }
 
 .nappula{
