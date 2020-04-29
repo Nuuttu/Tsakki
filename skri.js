@@ -1,5 +1,11 @@
 var aakkoset = ["0", "A", "B", "C", "D", "E", "F", "G", "H"];
-
+var ruutuxy = [];
+for (i = 0; i < 8; i++) {
+    ruutuxy[i] = [i + 1];
+    for (j = 0; j < 8; j++) {
+        ruutuxy[i][j] = [j + 1];
+    }
+}
 
 function alustus() {
     var lauta2 = document.getElementById("alustansisys");
