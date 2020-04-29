@@ -111,8 +111,6 @@ function nappulaalustus() {
         document.getElementById("ruutu" + xy(i, 7)).innerHTML = "<img src='sotilas_m.png' draggable='true' ondragstart='drag(event)' id='drag_sm" + i + "'></img>";
         document.getElementById("ruutu" + xy(i, 2)).innerHTML = "<img src='sotilas_v.png' draggable='true' ondragstart='drag(event)' id='drag_sv" + i +"'></img>";
     }
-
-
 }
 
 function liike(ruutu) {
