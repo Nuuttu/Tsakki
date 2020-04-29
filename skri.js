@@ -23,7 +23,7 @@ function alustus() {
                 ruudut2 += "valkoinen'";
             }
 
-            ruudut2 += " id='ruutu" + ruutuid + "' onclick='liike(" + ruutuid + ")'>" + aakkoset[j] + i + "</div>";
+            ruudut2 += " id='ruutu" + ruutuid + "' onclick='liike(" + ruutuid + ")'></div>";
             ruutuid++;
 
         }
