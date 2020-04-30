@@ -15,7 +15,7 @@ function alustus() {
     var lauta2 = document.getElementById("alustansisys");
     var ruudut2 = "";
     var ruutuid = 1;
-    
+
     document.getElementById("liikkeet").innerHTML = "";
     for (i = 8; i > 0; i--) {
         ruudut2 += "<div class='rivi'>";
@@ -45,6 +45,7 @@ function alustus() {
 
 // DRAG & DROP PAIKKA
 // DROP AND DRAG
+var lahtoruutu;
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -52,34 +53,47 @@ function allowDrop(ev) {
 
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
-
-    console.log(ev.target.id + " ????");
-    console.log(document.getElementById(ev.target.id).parentElement.id);
-
+    /*
+        console.log(ev.target.id + " ????");
+        console.log(document.getElementById(ev.target.id).parentElement.id);
+    */
     var r = Number(document.getElementById(ev.target.id).parentElement.id.replace('ruutu', ''));
-    liikealku(r);
+    lahtoruutu = r;
 }
 
 function drop(ev) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
 
-    console.log(ev.target.id + " !!!!");
-    console.log(ev.target.parentElement.id + " !?!?");
-    console.log((ev.target.id).includes('drag'));
-    if( (ev.target.id).includes('drag') ) {
-        ev.target.parentElement.innerHTML = "";
-    }  else {
-        ev.target.appendChild(document.getElementById(data));
-    }
-    ev.target.appendChild(document.getElementById(data));
-    
-    var r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu', ''));
-    liikeloppu(r);
+    /*
+    console.log(ev.dataTransfer.getData);
+    console.log(ev.currentTarget.id + " _currentTarget.id");
+    console.log(ev.target.id + " _target.id");
+    console.log(ev.target.parentElement.id + " _target.parentElement.id");
+    console.log(ev.dataTransfer.getData("text") + " _dataTransfer.getData('text')");
+    */
 
-    /*console.log(ev.dataTransfer.getData("text"));
+    if ((ev.target.id).includes('drag') && (ev.target.id != ev.dataTransfer.getData("text"))) {
+        ev.currentTarget.innerHTML = "";
+        ev.currentTarget.appendChild(document.getElementById(data));
+        var r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu', ''));
+        liikealku(lahtoruutu);
+        liikeloppu(r);
+    } else if ((ev.target.id == ev.dataTransfer.getData("text"))) {
+    } else {
+        ev.target.appendChild(document.getElementById(data));
+        var r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu', ''));
+        liikealku(lahtoruutu);
+        liikeloppu(r);
+    }
+    //ev.target.appendChild(document.getElementById(data));
+
+
+    /*
+    console.log(ev.dataTransfer.getData("text"));
     console.log(ev.target.appendChild(document.getElementById(data)));
-    console.log(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id);*/
+    console.log(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id);
+    */
 }
 
 
@@ -113,21 +127,21 @@ function xy(x, y) {
 }
 
 function r_to_y(r) {
-    var x = 8;
+    var y = 8;
     while (r > 8) {
-        x--;
+        y--;
         r -= 8;
     }
-    return (x);
+    return (y);
 }
 
 function r_to_x(r) {
-    var y = 1;
+    var x = 1;
     while (r > 8) {
         r -= 8;
     }
-    y = r;
-    return (y);
+    x = r;
+    return (x);
 }
 
 
@@ -145,20 +159,24 @@ function liikealku(ruutu) {
     lruutu += aakkoset[r_to_x(ruutu)] + "" + r_to_y(ruutu) + " ";
     liikelukukerroin++;
 
-    /*console.log(ruutu + " " + r_to_x(ruutu) + " " + r_to_y(ruutu) + " " + xy(r_to_x(ruutu), r_to_y(ruutu)));*/
+    /*
+    console.log(ruutu + " " + r_to_x(ruutu) + " " + r_to_y(ruutu) + " " + xy(r_to_x(ruutu), r_to_y(ruutu)));
+    */
 }
 
 function liikeloppu(ruutu) {
     var liikkeet = document.getElementById("liikkeet");
     liikkeet.innerHTML += lruutu + aakkoset[r_to_x(ruutu)] + "" + r_to_y(ruutu) + "; ";
     lruutu = "";
-    if ( liikelukukerroin >= 3 ){
+    if (liikelukukerroin >= 3) {
         liikkeet.innerHTML += "<br>";
         liikelukukerroin = 0;
     }
-    
 
-    /*console.log(ruutu + " " + r_to_x(ruutu) + " " + r_to_y(ruutu) + " " + xy(r_to_x(ruutu), r_to_y(ruutu)));*/
+
+    /*
+    console.log(ruutu + " " + r_to_x(ruutu) + " " + r_to_y(ruutu) + " " + xy(r_to_x(ruutu), r_to_y(ruutu)));
+    */
 }
 
 
@@ -205,7 +223,6 @@ function nappulaalustus() {
 
 
 /*
-
 function alustusvanha() {
     var lauta = document.getElementById("alusta");
     var ruudut = "";
