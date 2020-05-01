@@ -64,30 +64,35 @@ function drag(ev) {
 function drop(ev) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
+    var r = Number(Number(ev.currentTarget.id.replace('ruutu', '')));
+    var tyyppi = ev.dataTransfer.getData("text");
 
+    console.log(lahtoruutu);
+    console.log(Number(ev.currentTarget.id.replace('ruutu', '')));
     /*
-    console.log(ev.dataTransfer.getData);
-    console.log(ev.currentTarget.id + " _currentTarget.id");
     console.log(ev.target.id + " _target.id");
     console.log(ev.target.parentElement.id + " _target.parentElement.id");
-    console.log(ev.dataTransfer.getData("text") + " _dataTransfer.getData('text')");
-    */
+    console.log(ev.dataTransfer.getData("text") + " _dataTransfer.getData('text')");*/
 
-    if ((ev.target.id).includes('drag') && (ev.target.id != ev.dataTransfer.getData("text"))) {
-        ev.currentTarget.innerHTML = "";
-        ev.currentTarget.appendChild(document.getElementById(data));
-        var r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu', ''));
-        liikealku(lahtoruutu);
-        liikeloppu(r);
-    } else if ((ev.target.id == ev.dataTransfer.getData("text"))) {
-    } else {
-        ev.target.appendChild(document.getElementById(data));
-        var r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu', ''));
-        liikealku(lahtoruutu);
-        liikeloppu(r);
+    if (saannot(lahtoruutu, r, tyyppi)) {
+
+        console.log("Säännöt olivat totta!")
+
+
+        if ((ev.target.id).includes('drag') && (ev.target.id != ev.dataTransfer.getData("text"))) {
+            ev.currentTarget.innerHTML = "";
+            ev.currentTarget.appendChild(document.getElementById(data));
+            liikealku(lahtoruutu);
+            r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu', ''));
+            liikeloppu(r);
+        } else if ((ev.target.id == ev.dataTransfer.getData("text"))) {
+        } else {
+            ev.target.appendChild(document.getElementById(data));
+            liikealku(lahtoruutu);
+            r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu', ''));
+            liikeloppu(r);
+        }
     }
-    //ev.target.appendChild(document.getElementById(data));
-
 
     /*
     console.log(ev.dataTransfer.getData("text"));
@@ -103,12 +108,90 @@ function drop(ev) {
 // SYÖNTI JA EHKÄ MUITA LIIKKUMISRAJOITUKSIA
 // wip
 
-function syonti() {
+function saannot(a, l, tyyppi) {
+    
+    //console.log(rtox(a) + "," + rtoy(a) + " " + rtox(l) + "," + rtoy(l));
+    //console.log(( a- l ) % 8 == 0);
+    //console.log(Math.abs(rtoy(a) - rtoy(l)));
+    // ALAS
+    if ((( a - l) % 8 == 0) && (a - l < 0)) {
+        for ( i = 1; i < ( Math.abs(rtoy(a) - rtoy(l))) ; i++) {
+            //console.log("ruutu" + (a + (i)*8));
+            if (document.getElementById("ruutu" + ((a + (i)*8))).hasChildNodes()) {
+                console.log(" EI ONNISTU ");
+                return(false);
+            }
+        }
+    }
+    // YLÖS
+    if ((( a - l) % 8 == 0) && (a - l > 0)) {
+        for ( i = 1; i < ( Math.abs(rtoy(a) - rtoy(l))) ; i++) {
+            if (document.getElementById("ruutu" + ((a + (-i)*8))).hasChildNodes()) {
+                console.log(" EI ONNISTU ");
+                return(false);
+            }
+        }
+    }
+    // OIKEA
+    if (rtoy(a) == rtoy(l) && ( a < l )) {
+        for ( i = 1; i < ( Math.abs(rtox(a) - rtox(l))) ; i++) {
+            if (document.getElementById("ruutu" + ((a + (i)))).hasChildNodes()) {
+                console.log(" EI ONNISTU ");
+                return(false);
+            }
+        }
+    }
+    // VASEN
+    if (rtoy(a) == rtoy(l) && ( l < a)) {
+        for ( i = 1; i < ( Math.abs(rtox(a) - rtox(l))) ; i++) {
+            if (document.getElementById("ruutu" + ((a + (-i)))).hasChildNodes()) {
+                console.log(" EI ONNISTU ");
+                return(false);
+            }
+        }
+    }
+    // suoraa ylös      y++ =   r - 8
 
+    // suoraa oikee     x++ =   r + 1
+
+    // suoraa alas      y-- =   r + 8
+
+    // suoraa vasen     x-- =   r - 1
+
+
+    // viisto koillinen     x++ y++  =  r - 7 
+
+    // viisto kaakko        x++ y--  =  r + 9
+
+    // viisto lounas        x-- y--  =  r + 7
+
+    // viisto luode         x-- y++  =  r - 9
+
+    // tyyppi = TORNI
+    
+    console.log(tyyppi.includes('t'));
+    if ( tyyppi.includes('t')) {
+        if(rtoy(a) == rtoy(l)){
+            return(true);
+        } else if(rtox(a) == rtox(l)){
+            return(true);
+        } else {
+            return(false);
+        }
+    }
+
+    return (true);
 }
 
 
+    function tyyppitarkistus(tyyppi){
+        
+    }
 
+    // OMAA EI VOI SYÖDÄ SÄÄNTÖ
+    function puoli(){
+
+    }
 
 
 
@@ -126,7 +209,7 @@ function xy(x, y) {
     }
 }
 
-function r_to_y(r) {
+function rtoy(r) {
     var y = 8;
     while (r > 8) {
         y--;
@@ -135,7 +218,7 @@ function r_to_y(r) {
     return (y);
 }
 
-function r_to_x(r) {
+function rtox(r) {
     var x = 1;
     while (r > 8) {
         r -= 8;
@@ -156,7 +239,7 @@ var liikelukukerroin = 0;
 
 function liikealku(ruutu) {
     var liikkeet = document.getElementById("liikkeet");
-    lruutu += aakkoset[r_to_x(ruutu)] + "" + r_to_y(ruutu) + " ";
+    lruutu += aakkoset[rtox(ruutu)] + "" + rtoy(ruutu) + " ";
     liikelukukerroin++;
 
     /*
@@ -166,7 +249,7 @@ function liikealku(ruutu) {
 
 function liikeloppu(ruutu) {
     var liikkeet = document.getElementById("liikkeet");
-    liikkeet.innerHTML += lruutu + aakkoset[r_to_x(ruutu)] + "" + r_to_y(ruutu) + "; ";
+    liikkeet.innerHTML += lruutu + aakkoset[rtox(ruutu)] + "" + rtoy(ruutu) + "; ";
     lruutu = "";
     if (liikelukukerroin >= 3) {
         liikkeet.innerHTML += "<br>";
