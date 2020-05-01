@@ -109,47 +109,106 @@ function drop(ev) {
 // wip
 
 function saannot(a, l, tyyppi) {
-    
+
+
+
+
+
+
+
+
     //console.log(rtox(a) + "," + rtoy(a) + " " + rtox(l) + "," + rtoy(l));
     //console.log(( a- l ) % 8 == 0);
     //console.log(Math.abs(rtoy(a) - rtoy(l)));
     // ALAS
-    if ((( a - l) % 8 == 0) && (a - l < 0)) {
-        for ( i = 1; i < ( Math.abs(rtoy(a) - rtoy(l))) ; i++) {
-            //console.log("ruutu" + (a + (i)*8));
-            if (document.getElementById("ruutu" + ((a + (i)*8))).hasChildNodes()) {
+    if (((a - l) % 8 == 0) && (a - l < 0)) {
+        for (i = 1; i < (Math.abs(rtoy(a) - rtoy(l))); i++) {
+            //console.log("ruutu" + (a + (i) * 8) + " ___Ruutu käyty läpi");
+            if (document.getElementById("ruutu" + ((a + (i) * 8))).hasChildNodes()) {
                 console.log(" EI ONNISTU ");
-                return(false);
+                return (false);
             }
         }
     }
     // YLÖS
-    if ((( a - l) % 8 == 0) && (a - l > 0)) {
-        for ( i = 1; i < ( Math.abs(rtoy(a) - rtoy(l))) ; i++) {
-            if (document.getElementById("ruutu" + ((a + (-i)*8))).hasChildNodes()) {
-                console.log(" EI ONNISTU ");
-                return(false);
+    if (((a - l) % 8 == 0) && (a - l > 0)) {
+        for (i = 1; i < (Math.abs(rtoy(a) - rtoy(l))); i++) {
+            if (document.getElementById("ruutu" + ((a + (-i) * 8))).hasChildNodes()) {
+                return (false);
             }
         }
     }
     // OIKEA
-    if (rtoy(a) == rtoy(l) && ( a < l )) {
-        for ( i = 1; i < ( Math.abs(rtox(a) - rtox(l))) ; i++) {
+    if (rtoy(a) == rtoy(l) && (a < l)) {
+        for (i = 1; i < (Math.abs(rtox(a) - rtox(l))); i++) {
             if (document.getElementById("ruutu" + ((a + (i)))).hasChildNodes()) {
-                console.log(" EI ONNISTU ");
-                return(false);
+                return (false);
             }
         }
     }
     // VASEN
-    if (rtoy(a) == rtoy(l) && ( l < a)) {
-        for ( i = 1; i < ( Math.abs(rtox(a) - rtox(l))) ; i++) {
+    if (rtoy(a) == rtoy(l) && (l < a)) {
+        for (i = 1; i < (Math.abs(rtox(a) - rtox(l))); i++) {
             if (document.getElementById("ruutu" + ((a + (-i)))).hasChildNodes()) {
-                console.log(" EI ONNISTU ");
-                return(false);
+                return (false);
             }
         }
     }
+
+    // VIISTOT  KOILLINEN
+    //if (Math.abs(rtoy(a)) - Math.abs(rtoy(l)) == Math.abs(rtox(a)) - Math.abs(rtox(l))) {
+    //console.log( ((rtox(a) + " " + rtox(l)) ) + " " + ((rtoy(a) + " " +  rtoy(l)) ));
+    //console.log( ((rtox(a) - rtox(l)) == 1) + " " + ((rtoy(a) - rtoy(l)) == 1 ));
+    //console.log( ((a - l) > 0) && ((a - l) % 7) == 0);
+    //console.log((Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) / 2);
+
+    if (((a - l) > 0) && ((a - l) % 7) == 0) {
+        for (i = 1; i < (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) / 2; i++) {
+
+            //console.log("PAOSDPOAKSPDPASOKDPO " + a + " " + rtox(a + i) + " " + rtoy(a + i));
+            //console.log("ruutu" + (a - i * 7) + " ___ruutu käyty läpi");
+            //console.log(Math.abs(Math.abs(a) / 8 - Math.abs(l) / 8));
+
+            if (document.getElementById("ruutu" + (a + (-i) * 7)).hasChildNodes()) {
+                console.log(" EI ONNISTU ");
+                return (false);
+            }
+
+        }
+    }
+
+    // VIISTOT LOUNAS
+    if (((a - l) < 0) && ((a - l) % 7) == 0) {
+        for (i = 1; i < (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) / 2; i++) {
+            if (document.getElementById("ruutu" + (a + i * 7)).hasChildNodes()) {
+                console.log(" EI ONNISTU ");
+                return (false);
+            }
+
+        }
+    }
+
+    // VIISTOT KAAKKO
+    if (((a - l) < 0) && ((a - l) % 9) == 0) {
+        for (i = 1; i < (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) / 2; i++) {
+            if (document.getElementById("ruutu" + (a + i * 9)).hasChildNodes()) {
+                console.log(" EI ONNISTU ");
+                return (false);
+            }
+
+        }
+    }
+
+    // VIISTOT LUODE
+    if (((a - l) > 0) && ((a - l) % 9) == 0) {
+        for (i = 1; i < (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) / 2; i++) {
+            if (document.getElementById("ruutu" + (a + (-i) * 9)).hasChildNodes()) {
+                console.log(" EI ONNISTU ");
+                return (false);
+            }
+        }
+    }
+
     // suoraa ylös      y++ =   r - 8
 
     // suoraa oikee     x++ =   r + 1
@@ -168,30 +227,50 @@ function saannot(a, l, tyyppi) {
     // viisto luode         x-- y++  =  r - 9
 
     // tyyppi = TORNI
-    
-    console.log(tyyppi.includes('t'));
-    if ( tyyppi.includes('t')) {
-        if(rtoy(a) == rtoy(l)){
-            return(true);
-        } else if(rtox(a) == rtox(l)){
-            return(true);
+
+
+    // KUNINGAS
+    if (tyyppi.includes('k')) {
+        if ((Math.abs((a - l)) == 1) || (Math.abs((a - l)) == 8) || (Math.abs((a - l)) == 9) || (Math.abs((a - l)) == 7)) {
+            return (true);
+        } else { return (false); }
+    }
+
+    // LÄHETTI
+    if (tyyppi.includes('l')) {
+
+        //console.log(Math.abs(rtoy(a)) + " " + Math.abs(rtoy(l)) + " " + Math.abs(rtox(a)) + " " + Math.abs(rtox(l)));
+        //console.log(Math.abs((Math.abs(rtoy(a)) - Math.abs(rtoy(l)))) == Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l))));
+
+        if (((a - l) % 7) == 0 && Math.abs((Math.abs(rtoy(a)) - Math.abs(rtoy(l)))) == Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) {
+            return (true);
+        } else if (((a - l) % 9) == 0 && Math.abs((Math.abs(rtoy(a)) - Math.abs(rtoy(l)))) == Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) {
+            return (true);
+        } else { return (false); }
+    }
+
+    // TORNI
+    if (tyyppi.includes('t')) {
+        if (rtoy(a) == rtoy(l)) {
+            return (true);
+        } else if (rtox(a) == rtox(l)) {
+            return (true);
         } else {
-            return(false);
+            return (false);
         }
     }
+
 
     return (true);
 }
 
 
-    function tyyppitarkistus(tyyppi){
-        
-    }
 
-    // OMAA EI VOI SYÖDÄ SÄÄNTÖ
-    function puoli(){
 
-    }
+// OMAA EI VOI SYÖDÄ SÄÄNTÖ
+function puoli() {
+
+}
 
 
 
