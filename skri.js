@@ -1,6 +1,7 @@
 var aakkoset = ["0", "A", "B", "C", "D", "E", "F", "G", "H"];
 var viimenenliike = "";
 var ruutuxy = [];
+var kummanvuoro = "v";
 for (i = 0; i < 8; i++) {
     ruutuxy[i] = [i + 1];
     for (j = 0; j < 8; j++) {
@@ -35,6 +36,7 @@ function alustus() {
         ruudut2 += "</div>";
     }
 
+    kummanvuoro = "v";
     viimenenliike = "";
     lauta2.innerHTML = ruudut2;
     liikelukukerroin = 0;
@@ -47,7 +49,6 @@ function alustus() {
 // DRAG & DROP PAIKKA
 // DROP AND DRAG
 var lahtoruutu;
-
 function allowDrop(ev) {
     ev.preventDefault();
 }
@@ -78,7 +79,9 @@ function drop(ev) {
     if (saannot(lahtoruutu, r, tyyppi)) {
 
         console.log("Säännöt olivat totta!")
-
+        if (kummanvuoro == "v"){
+            kummanvuoro = "m";
+        } else { kummanvuoro = "v" }
 
         if ((ev.target.id).includes('drag') && (ev.target.id != ev.dataTransfer.getData("text"))) {
             ev.currentTarget.innerHTML = "";
@@ -105,13 +108,22 @@ function drop(ev) {
 
 
 
-
 // SYÖNTI JA EHKÄ MUITA LIIKKUMISRAJOITUKSIA
 // wip
 
 function saannot(a, l, tyyppi) {
 
-
+    // VUOROT
+    // VALKOINEN
+    console.log(document.getElementById("ruutu" + a).firstChild.id);
+    if ( kummanvuoro == "v" && document.getElementById("ruutu" + a).firstChild.id.includes('m') ) {
+        return(false);
+    }
+    
+    // MUSTA
+    if ( kummanvuoro == "m" && document.getElementById("ruutu" + a).firstChild.id.includes('v') ) {
+        return(false);
+    }
 
     // OMAN SYÖNTI
     // MUSTA
@@ -349,8 +361,6 @@ function ylennysm(a, l, tyyppi) {
     (document.getElementById("ruutu" + a).firstChild).classList.add("kuningatarm");
     document.getElementById("ruutu" + a).firstChild.src = "kuningatar_m.png";
 }
-
-
 
 
 // Ruutu ja koordinaatti vaihdokset
