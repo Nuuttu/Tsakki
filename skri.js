@@ -293,7 +293,7 @@ function saannot(a, l, tyyppi) {
             return (true);
         } else if ((((a - l) == -7) || ((a - l) == -9)) && document.getElementById("ruutu" + (l)).hasChildNodes()) {
             return(true);
-        } else if ( (((a - l) == -7) || ((a - l) == -9)) && (document.getElementById("ruutu" + (l + 8)).hasChildNodes()) && xy(viimenenliike.charAt(0),viimenenliike.charAt(1)) == l + 8 && xy(viimenenliike.charAt(3),viimenenliike.charAt(4)) == l - 8 ) {
+        } else if ( (((a - l) == -7) || ((a - l) == -9)) && (document.getElementById("ruutu" + (l - 8)).hasChildNodes()) && xy(viimenenliike.charAt(0),viimenenliike.charAt(1)) == l + 8 && xy(viimenenliike.charAt(3),viimenenliike.charAt(4)) == l - 8 ) {
             if ( ((document.getElementById("ruutu" + (l - 8) ).firstChild).classList).contains("sotilasv")  && xy(viimenenliike.charAt(0),viimenenliike.charAt(1)) == l + 8) {
                 document.getElementById("ruutu" + (l - 8) ).innerHTML = "";
             return(true);
