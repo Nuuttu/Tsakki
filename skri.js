@@ -11,10 +11,14 @@ var torniliikkunutav = "n";
 var torniliikkunuthv = "n";
 var torniliikkunutam = "n";
 var torniliikkunuthm = "n";
-// KAIKKIA UHATUT RUUDUT PIDETÄÄN ARRAYSSA
+// KAIKKI UHATUT RUUDUT PIDETÄÄN ARRAYSSA
 var uhkaruudutm = new Array(64);
 for (i = 0; i < 64; i++) {
     uhkaruudutm[i] = 0;
+}
+var uhkaruudutv = new Array(64);
+for (i = 0; i < 64; i++) {
+    uhkaruudutv[i] = 0;
 }
 for (i = 0; i < 8; i++) {
     ruutuxy[i] = [i + 1];
@@ -38,9 +42,9 @@ function alustus() {
         for (j = 1; j < 9; j++) {
             ruudut2 += "<div class='laatikko "
             if (j % 2 == 0 && i % 2 != 0 || j % 2 != 0 && i % 2 == 0) {
-                ruudut2 += "musta'";
-            } else {
                 ruudut2 += "valkoinen'";
+            } else {
+                ruudut2 += "musta'";
             }
 
             ruudut2 += " id='ruutu" + ruutuid + "' ondrop='drop(event)' ondragover='allowDrop(event)'></div>";
@@ -130,7 +134,8 @@ function drop(ev) {
 }
 
 
-
+// ______________________________________________________________________________________________________
+// ______________________________________________________________________________________________________
 
 // SAANNOT LÄHES KAIKKI
 // TARKISTAA LIIKKEEN OIKEELLISUUDEN JA KÄY LÄPI SÄÄNTÖJÄ
@@ -140,8 +145,8 @@ function saannot(a, l, tyyppi) {
     uhat();
 
     for (i = 1; i < 65; i++) {
-        console.log(uhkaruudutm[i]);
-        if (uhkaruudutm[i] == 1) {
+        //console.log(uhkaruudutm[i]);
+        if (uhkaruudutv[i] == 1) {
             //document.getElementById("ruutu" + i).style.backgroundColor = "red";
             document.getElementById("ruutu" + i).classList.add("punainenborder");
         } else {
@@ -151,6 +156,7 @@ function saannot(a, l, tyyppi) {
 
     for (i = 0; i < 64; i++) {
         uhkaruudutm[i] = 0;
+        uhkaruudutv[i] = 0;
     }
 
     // VUOROT
@@ -276,6 +282,10 @@ function saannot(a, l, tyyppi) {
     // viisto luode         x-- y++  =  r - 9
 
     //console.log(kuningasliikkunutv + " " + kuningasliikkunutm + " " + torniliikkunutav + " " + torniliikkunuthv + " " + torniliikkunutam + " " + torniliikkunuthm);
+
+// ______________________________________________________________________________________________________
+// ______________________________________________________________________________________________________
+
 
     // KUNINGAS
     if (((document.getElementById("ruutu" + a).firstChild).classList).contains("kuningasv") || ((document.getElementById("ruutu" + a).firstChild).classList).contains("kuningasm")) {
@@ -414,6 +424,8 @@ function saannot(a, l, tyyppi) {
     }
 
 
+    
+
     // SOTILAS VALKOINEN
     if (((document.getElementById("ruutu" + a).firstChild).classList).contains("sotilasv")) {
         //console.log("viimesen liikkeen koordinaatit: " + xy(viimenenliike.charAt(0),viimenenliike.charAt(1)) + " " + xy(viimenenliike.charAt(3),viimenenliike.charAt(4)));
@@ -475,22 +487,31 @@ function xyrajat(r, k) {
 }
 */
 
+
+
+
+
+
 // UHKARUUDUT
 function uhat() {
+
+
+    // ______________________________________________________________________________________________________
+    // ______________________________________________________________________________________________________
     // MUSTAN UHKAAMAT RUUDUT
     for (i = 1; i <= 8; i++) {
         for (j = 1; j <= 8; j++) {
-            //console.log(xy(j, i) + " Tarkistettava ruutu");
+
             // SOTILAS MUSTA UHAT
             if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
                 if (((document.getElementById("ruutu" + xy(j, i)).firstChild).classList).contains("sotilasm")) {
                     //console.log("ruutu JAA JAA " + xy(j - 1, i - 1));
                     //console.log("ruutu JAA JAA " + xy(j + 1, i - 1));
                     //console.log("i = " + i + " j on = " + j);
-                    if (i - 1 > 0 && j - 1 > 0 && !(document.getElementById("ruutu" + xy(j - 1, i - 1)).hasChildNodes())) {
+                    if (i - 1 > 0 && j - 1 > 0) {
                         uhkaruudutm[xy(j - 1, i - 1)] = 1;
                     }
-                    if (i - 1 > 0 && j + 1 < 9 && !(document.getElementById("ruutu" + xy(j + 1, i - 1)).hasChildNodes())) {
+                    if (i - 1 > 0 && j + 1 < 9) {
                         uhkaruudutm[xy(j + 1, i - 1)] = 1;
                     }
                 }
@@ -500,18 +521,445 @@ function uhat() {
             // TORNI MUSTA UHAT
             if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
                 if (((document.getElementById("ruutu" + xy(j, i)).firstChild).classList).contains("tornim")) {
-                    // x - n
-                    for (xn = j - 1; xn <= 0; xn--) {
-                        if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
-                            if (i - 1 > 0 && xn - 1 > 0 && !(document.getElementById("ruutu" + xy(xn, i)).hasChildNodes())) {
-                                uhkaruudutm[xy(xn, i)] = 1;
+                    // VASEN
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (j - ti > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j - ti, i)).hasChildNodes())) {
+                                uhkaruudutm[xy(j - ti, i)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j - ti, i)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // OIKEA
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (j + ti < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j + ti, i)).hasChildNodes())) {
+                                uhkaruudutm[xy(j + ti, i)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j + ti, i)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // YLÖS
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (i - ti > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j, i - ti)).hasChildNodes())) {
+                                uhkaruudutm[xy(j, i - ti)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j, i - ti)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // ALAS
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (i + ti < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j, i + ti)).hasChildNodes())) {
+                                uhkaruudutm[xy(j, i + ti)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j, i + ti)] = 1;
+                                ti = 9;
                             }
                         }
                     }
                 }
             }
 
+            //console.log(xy(j, i) + " Tarkistettava ruutu");
+            // LÄHETTI MUSTA UHAT
+            if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+                if ((document.getElementById("ruutu" + xy(j, i)).firstChild.classList).contains("lahettim")) {
+                    // VIISTO KAAKKO
+                    for (var li = 1; li < 8; li++) {
+                        if (j + li < 9 && i - li > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j + li, i - li)).hasChildNodes())) {
+                                uhkaruudutm[xy(j + li, i - li)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j + li, i - li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO LUODE
+                    for (var li = 1; li < 8; li++) {
+                        if (j - li > 0 && i + li < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j - li, i + li)).hasChildNodes())) {
+                                uhkaruudutm[xy(j - li, i + li)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j - li, i + li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO KOILLINEN
+                    for (var li = 1; li < 8; li++) {
+                        if (j + li < 9 && i + li < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j + li, i + li)).hasChildNodes())) {
+                                uhkaruudutm[xy(j + li, i + li)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j + li, i + li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO LOUNAS
+                    for (var li = 1; li < 8; li++) {
+                        if (j - li > 0 && i - li > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j - li, i - li)).hasChildNodes())) {
+                                uhkaruudutm[xy(j - li, i - li)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j - li, i - li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    }
+                }
+            }
 
+            // KUNGINGATAR MUSTA
+            if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+                if ((document.getElementById("ruutu" + xy(j, i)).firstChild.classList).contains("kuningatarm")) {
+                    // VIISTO KAAKKO
+                    for (var li = 1; li < 8; li++) {
+                        if (j + li < 9 && i - li > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j + li, i - li)).hasChildNodes())) {
+                                uhkaruudutm[xy(j + li, i - li)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j + li, i - li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO LUODE
+                    for (var li = 1; li < 8; li++) {
+                        if (j - li > 0 && i + li < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j - li, i + li)).hasChildNodes())) {
+                                uhkaruudutm[xy(j - li, i + li)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j - li, i + li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO KOILLINEN
+                    for (var li = 1; li < 8; li++) {
+                        if (j + li < 9 && i + li < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j + li, i + li)).hasChildNodes())) {
+                                uhkaruudutm[xy(j + li, i + li)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j + li, i + li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO LOUNAS
+                    for (var li = 1; li < 8; li++) {
+                        if (j - li > 0 && i - li > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j - li, i - li)).hasChildNodes())) {
+                                uhkaruudutm[xy(j - li, i - li)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j - li, i - li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VASEN
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (j - ti > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j - ti, i)).hasChildNodes())) {
+                                uhkaruudutm[xy(j - ti, i)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j - ti, i)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // OIKEA
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (j + ti < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j + ti, i)).hasChildNodes())) {
+                                uhkaruudutm[xy(j + ti, i)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j + ti, i)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // YLÖS
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (i - ti > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j, i - ti)).hasChildNodes())) {
+                                uhkaruudutm[xy(j, i - ti)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j, i - ti)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // ALAS
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (i + ti < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j, i + ti)).hasChildNodes())) {
+                                uhkaruudutm[xy(j, i + ti)] = 1;
+                            } else {
+                                uhkaruudutm[xy(j, i + ti)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // HEVONEN MUSTA
+            if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+                if ((document.getElementById("ruutu" + xy(j, i)).firstChild.classList).contains("hevonenm")) {
+                    if (j - 2 > 0 && i - 1 > 0) { uhkaruudutm[xy(j - 2, i - 1)] = 1; }
+                    if (j + 2 < 9 && i - 1 > 0) { uhkaruudutm[xy(j + 2, i - 1)] = 1; }
+                    if (j - 2 > 0 && i + 1 < 9) { uhkaruudutm[xy(j - 2, i + 1)] = 1; }
+                    if (j + 2 < 9 && i + 1 < 9) { uhkaruudutm[xy(j + 2, i + 1)] = 1; }
+                    if (j - 1 > 0 && i - 2 > 0) { uhkaruudutm[xy(j - 1, i - 2)] = 1; }
+                    if (j + 1 < 9 && i - 2 > 0) { uhkaruudutm[xy(j + 1, i - 2)] = 1; }
+                    if (j - 1 > 0 && i + 2 < 9) { uhkaruudutm[xy(j - 1, i + 2)] = 1; }
+                    if (j + 1 < 9 && i + 2 < 9) { uhkaruudutm[xy(j + 1, i + 2)] = 1; }
+                }
+            }
+
+            // KUNINGAS MUSTA
+            if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+                if ((document.getElementById("ruutu" + xy(j, i)).firstChild.classList).contains("kuningasm")) {
+                    if (j - 1 > 0 && i - 1 > 0) { uhkaruudutm[xy(j - 1, i - 1)] = 1; }
+                    if (j + 1 < 9 && i - 1 > 0) { uhkaruudutm[xy(j + 1, i - 1)] = 1; }
+                    if (j > 0 && i - 1 > 0) { uhkaruudutm[xy(j, i - 1)] = 1; }
+
+                    if (j - 1 > 0 && i + 1 < 9) { uhkaruudutm[xy(j - 1, i + 1)] = 1; }
+                    if (j + 1 < 9 && i + 1 < 9) { uhkaruudutm[xy(j + 1, i + 1)] = 1; }
+                    if (j < 9 && i + 1 < 9) { uhkaruudutm[xy(j, i + 1)] = 1; }
+
+                    if (j - 1 > 0 && i < 9) { uhkaruudutm[xy(j - 1, i)] = 1; }
+                    if (j + 1 < 9 && i < 9) { uhkaruudutm[xy(j + 1, i)] = 1; }
+                }
+            }
+
+            // ______________________________________________________________________________________________________
+            // ______________________________________________________________________________________________________
+            // VALKOISEN UHKAAMAT RUUDUT 
+            // SOTILAS VALKOINEN UHAT
+            if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+                if (((document.getElementById("ruutu" + xy(j, i)).firstChild).classList).contains("sotilasv")) {
+                    //console.log("ruutu JAA JAA " + xy(j - 1, i - 1));
+                    //console.log("ruutu JAA JAA " + xy(j + 1, i - 1));
+                    //console.log("i = " + i + " j on = " + j);
+                    if (i + 1 > 0 && j - 1 > 0) {
+                        uhkaruudutv[xy(j - 1, i + 1)] = 1;
+                    }
+                    if (i + 1 > 0 && j + 1 < 9) {
+                        uhkaruudutv[xy(j + 1, i + 1)] = 1;
+                    }
+                }
+            }
+
+
+            // TORNI VALKOINEN UHAT
+            if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+                if (((document.getElementById("ruutu" + xy(j, i)).firstChild).classList).contains("torniv")) {
+                    // VASEN
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (j - ti > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j - ti, i)).hasChildNodes())) {
+                                uhkaruudutv[xy(j - ti, i)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j - ti, i)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // OIKEA
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (j + ti < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j + ti, i)).hasChildNodes())) {
+                                uhkaruudutv[xy(j + ti, i)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j + ti, i)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // YLÖS
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (i - ti > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j, i - ti)).hasChildNodes())) {
+                                uhkaruudutv[xy(j, i - ti)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j, i - ti)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // ALAS
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (i + ti < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j, i + ti)).hasChildNodes())) {
+                                uhkaruudutv[xy(j, i + ti)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j, i + ti)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    }
+                }
+            }
+
+            //console.log(xy(j, i) + " Tarkistettava ruutu");
+            // LÄHETTI VALKOINEN UHAT
+            if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+                if ((document.getElementById("ruutu" + xy(j, i)).firstChild.classList).contains("lahettiv")) {
+                    // VIISTO KAAKKO
+                    for (var li = 1; li < 8; li++) {
+                        if (j + li < 9 && i - li > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j + li, i - li)).hasChildNodes())) {
+                                uhkaruudutv[xy(j + li, i - li)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j + li, i - li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO LUODE
+                    for (var li = 1; li < 8; li++) {
+                        if (j - li > 0 && i + li < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j - li, i + li)).hasChildNodes())) {
+                                uhkaruudutv[xy(j - li, i + li)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j - li, i + li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO KOILLINEN
+                    for (var li = 1; li < 8; li++) {
+                        if (j + li < 9 && i + li < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j + li, i + li)).hasChildNodes())) {
+                                uhkaruudutv[xy(j + li, i + li)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j + li, i + li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO LOUNAS
+                    for (var li = 1; li < 8; li++) {
+                        if (j - li > 0 && i - li > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j - li, i - li)).hasChildNodes())) {
+                                uhkaruudutv[xy(j - li, i - li)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j - li, i - li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // KUNGINGATAR VALKOINEN
+            if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+                if ((document.getElementById("ruutu" + xy(j, i)).firstChild.classList).contains("kuningatarv")) {
+                    // VIISTO KAAKKO
+                    for (var li = 1; li < 8; li++) {
+                        if (j + li < 9 && i - li > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j + li, i - li)).hasChildNodes())) {
+                                uhkaruudutv[xy(j + li, i - li)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j + li, i - li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO LUODE
+                    for (var li = 1; li < 8; li++) {
+                        if (j - li > 0 && i + li < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j - li, i + li)).hasChildNodes())) {
+                                uhkaruudutv[xy(j - li, i + li)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j - li, i + li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO KOILLINEN
+                    for (var li = 1; li < 8; li++) {
+                        if (j + li < 9 && i + li < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j + li, i + li)).hasChildNodes())) {
+                                uhkaruudutv[xy(j + li, i + li)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j + li, i + li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VIISTO LOUNAS
+                    for (var li = 1; li < 8; li++) {
+                        if (j - li > 0 && i - li > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j - li, i - li)).hasChildNodes())) {
+                                uhkaruudutv[xy(j - li, i - li)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j - li, i - li)] = 1;
+                                li = 9;
+                            }
+                        }
+                    } // VASEN
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (j - ti > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j - ti, i)).hasChildNodes())) {
+                                uhkaruudutv[xy(j - ti, i)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j - ti, i)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // OIKEA
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (j + ti < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j + ti, i)).hasChildNodes())) {
+                                uhkaruudutv[xy(j + ti, i)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j + ti, i)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // YLÖS
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (i - ti > 0) {
+                            if (!(document.getElementById("ruutu" + xy(j, i - ti)).hasChildNodes())) {
+                                uhkaruudutv[xy(j, i - ti)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j, i - ti)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    } // ALAS
+                    for (var ti = 1; ti < 8; ti++) {
+                        if (i + ti < 9) {
+                            if (!(document.getElementById("ruutu" + xy(j, i + ti)).hasChildNodes())) {
+                                uhkaruudutv[xy(j, i + ti)] = 1;
+                            } else {
+                                uhkaruudutv[xy(j, i + ti)] = 1;
+                                ti = 9;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // HEVONEN VALKOINEN
+            if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+                if ((document.getElementById("ruutu" + xy(j, i)).firstChild.classList).contains("hevonenv")) {
+                    if (j - 2 > 0 && i - 1 > 0) { uhkaruudutv[xy(j - 2, i - 1)] = 1; }
+                    if (j + 2 < 9 && i - 1 > 0) { uhkaruudutv[xy(j + 2, i - 1)] = 1; }
+                    if (j - 2 > 0 && i + 1 < 9) { uhkaruudutv[xy(j - 2, i + 1)] = 1; }
+                    if (j + 2 < 9 && i + 1 < 9) { uhkaruudutv[xy(j + 2, i + 1)] = 1; }
+                    if (j - 1 > 0 && i - 2 > 0) { uhkaruudutv[xy(j - 1, i - 2)] = 1; }
+                    if (j + 1 < 9 && i - 2 > 0) { uhkaruudutv[xy(j + 1, i - 2)] = 1; }
+                    if (j - 1 > 0 && i + 2 < 9) { uhkaruudutv[xy(j - 1, i + 2)] = 1; }
+                    if (j + 1 < 9 && i + 2 < 9) { uhkaruudutv[xy(j + 1, i + 2)] = 1; }
+                }
+            }
+
+            // KUNINGAS VALKOINEN
+            if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+                if ((document.getElementById("ruutu" + xy(j, i)).firstChild.classList).contains("kuningasv")) {
+                    if (j - 1 > 0 && i - 1 > 0) { uhkaruudutv[xy(j - 1, i - 1)] = 1; }
+                    if (j + 1 < 9 && i - 1 > 0) { uhkaruudutv[xy(j + 1, i - 1)] = 1; }
+                    if (j > 0 && i - 1 > 0) { uhkaruudutv[xy(j, i - 1)] = 1; }
+
+                    if (j - 1 > 0 && i + 1 < 9) { uhkaruudutv[xy(j - 1, i + 1)] = 1; }
+                    if (j + 1 < 9 && i + 1 < 9) { uhkaruudutv[xy(j + 1, i + 1)] = 1; }
+                    if (j < 9 && i + 1 < 9) { uhkaruudutv[xy(j, i + 1)] = 1; }
+
+                    if (j - 1 > 0 && i < 9) { uhkaruudutv[xy(j - 1, i)] = 1; }
+                    if (j + 1 < 9 && i < 9) { uhkaruudutv[xy(j + 1, i)] = 1; }
+                }
+            }
         }
     }
 }
@@ -528,6 +976,10 @@ function onkouhattu(a, l) {
 
 // Ruutu ja koordinaatti vaihdokset
 // ruutujen ID muutetaan x ja y , ja toistepäin
+
+
+// ______________________________________________________________________________________________________
+// ______________________________________________________________________________________________________
 
 function xy(x, y) {
     if (typeof x == 'number') {
@@ -594,7 +1046,8 @@ function liikeloppu(ruutu) {
 }
 
 
-
+// ______________________________________________________________________________________________________
+// ______________________________________________________________________________________________________
 
 // NAPPULA-ALUSTUKSET
 // määritellään ruudut, mihin nappulat laitetaan
@@ -621,12 +1074,12 @@ function nappulaalustus() {
     document.getElementById("ruutu" + xy("f", 1)).innerHTML = "<img src='lahetti_v.png' class='lahettiv' draggable='true' ondragstart='drag(event)' id='drag_lv2'></img>";
 
     //kuningas
-    document.getElementById("ruutu" + xy("d", 8)).innerHTML = "<img src='kuningas_m.png' class='kuningasm' draggable='true' ondragstart='drag(event)' id='drag_km'></img>";
-    document.getElementById("ruutu" + xy(4, 1)).innerHTML = "<img src='kuningas_v.png' class='kuningasv' draggable='true' ondragstart='drag(event)' id='drag_kv'></img>";
+    document.getElementById("ruutu" + xy("e", 8)).innerHTML = "<img src='kuningas_m.png' class='kuningasm' draggable='true' ondragstart='drag(event)' id='drag_km'></img>";
+    document.getElementById("ruutu" + xy("e", 1)).innerHTML = "<img src='kuningas_v.png' class='kuningasv' draggable='true' ondragstart='drag(event)' id='drag_kv'></img>";
 
     //kuningatar
-    document.getElementById("ruutu" + xy("e", 8)).innerHTML = "<img src='kuningatar_m.png' class='kuningatarm' draggable='true' ondragstart='drag(event)' id='drag_qm'></img>";
-    document.getElementById("ruutu" + xy("e", 1)).innerHTML = "<img src='kuningatar_v.png' class='kuningatarv' draggable='true' ondragstart='drag(event)' id='drag_qv'></img>";
+    document.getElementById("ruutu" + xy("d", 8)).innerHTML = "<img src='kuningatar_m.png' class='kuningatarm' draggable='true' ondragstart='drag(event)' id='drag_qm'></img>";
+    document.getElementById("ruutu" + xy("d", 1)).innerHTML = "<img src='kuningatar_v.png' class='kuningatarv' draggable='true' ondragstart='drag(event)' id='drag_qv'></img>";
 
     //sotilaat
     for (i = 1; i <= 8; i++) {
