@@ -139,11 +139,13 @@ function saannot(a, l, tyyppi) {
 
     uhat();
 
-    for (i = 0; i < 64; i++) {
-        //console.log(uhkaruudutm[i]);
+    for (i = 1; i < 65; i++) {
+        console.log(uhkaruudutm[i]);
         if (uhkaruudutm[i] == 1) {
             //document.getElementById("ruutu" + i).style.backgroundColor = "red";
-           
+            document.getElementById("ruutu" + i).classList.add("punainenborder");
+        } else {
+            document.getElementById("ruutu" + i).classList.remove("punainenborder");
         }
     }
 
@@ -391,15 +393,15 @@ function saannot(a, l, tyyppi) {
                 ylennysm(a, l, tyyppi);
             } else { return (true); }
             // SYÖNTI JA YLENNYS
-         // ( i - 1 > 0 && j + 1 < 9 && !(document.getElementById("ruutu" + xy(j + 1, i - 1)).hasChildNodes()))
-        } else if ((((a - l) == -7) || ((a - l) == -9)) && (document.getElementById("ruutu" + (l)).hasChildNodes()) && (rtoy(l)) == 1 && (rtoy(a) != rtoy(l)) ) {
+            // ( i - 1 > 0 && j + 1 < 9 && !(document.getElementById("ruutu" + xy(j + 1, i - 1)).hasChildNodes()))
+        } else if ((((a - l) == -7) || ((a - l) == -9)) && (document.getElementById("ruutu" + (l)).hasChildNodes()) && (rtoy(l)) == 1 && (rtoy(a) != rtoy(l))) {
             ylennysm(a, l, tyyppi);
             return (true);
             // SYÖNTI
-        } else if ((((a - l) == -7) || ((a - l) == -9)) && (document.getElementById("ruutu" + (l)).hasChildNodes()) && (rtoy(a) != rtoy(l)) ) {
+        } else if ((((a - l) == -7) || ((a - l) == -9)) && (document.getElementById("ruutu" + (l)).hasChildNodes()) && (rtoy(a) != rtoy(l))) {
             return (true);
             // OHESTALYÖNTI
-        } else if ((((a - l) == -7) || ((a - l) == -9)) && (document.getElementById("ruutu" + (l - 8)).hasChildNodes()) && xy(viimenenliike.charAt(0), viimenenliike.charAt(1)) == l + 8 && xy(viimenenliike.charAt(3), viimenenliike.charAt(4)) == l - 8 && (rtoy(a) != rtoy(l)) ) {
+        } else if ((((a - l) == -7) || ((a - l) == -9)) && (document.getElementById("ruutu" + (l - 8)).hasChildNodes()) && xy(viimenenliike.charAt(0), viimenenliike.charAt(1)) == l + 8 && xy(viimenenliike.charAt(3), viimenenliike.charAt(4)) == l - 8 && (rtoy(a) != rtoy(l))) {
             if (((document.getElementById("ruutu" + (l - 8)).firstChild).classList).contains("sotilasv") && xy(viimenenliike.charAt(0), viimenenliike.charAt(1)) == l + 8) {
                 document.getElementById("ruutu" + (l - 8)).innerHTML = "";
                 document.getElementById("liikkeet").innerHTML += "s";
@@ -421,12 +423,12 @@ function saannot(a, l, tyyppi) {
             } else if (rtoy(l) == 8) {
                 ylennysv(a, l, tyyppi);
             } else { return (true); }
-        } else if ((((a - l) == 7) || ((a - l) == 9)) && document.getElementById("ruutu" + (l)).hasChildNodes() && rtoy(l) == 8 && (rtoy(a) != rtoy(l)) ) {
+        } else if ((((a - l) == 7) || ((a - l) == 9)) && document.getElementById("ruutu" + (l)).hasChildNodes() && rtoy(l) == 8 && (rtoy(a) != rtoy(l))) {
             ylennysv(a, l, tyyppi);
             return (true);
-        } else if ((((a - l) == 7) || ((a - l) == 9)) && document.getElementById("ruutu" + (l)).hasChildNodes() && (rtoy(a) != rtoy(l)) ) {
+        } else if ((((a - l) == 7) || ((a - l) == 9)) && document.getElementById("ruutu" + (l)).hasChildNodes() && (rtoy(a) != rtoy(l))) {
             return (true);
-        } else if ((((a - l) == 7) || ((a - l) == 9)) && (document.getElementById("ruutu" + (l + 8)).hasChildNodes()) && xy(viimenenliike.charAt(0), viimenenliike.charAt(1)) == l - 8 && xy(viimenenliike.charAt(3), viimenenliike.charAt(4)) == l + 8 && (rtoy(a) != rtoy(l)) ) {
+        } else if ((((a - l) == 7) || ((a - l) == 9)) && (document.getElementById("ruutu" + (l + 8)).hasChildNodes()) && xy(viimenenliike.charAt(0), viimenenliike.charAt(1)) == l - 8 && xy(viimenenliike.charAt(3), viimenenliike.charAt(4)) == l + 8 && (rtoy(a) != rtoy(l))) {
             if (((document.getElementById("ruutu" + (l + 8)).firstChild).classList).contains("sotilasm") && xy(viimenenliike.charAt(0), viimenenliike.charAt(1)) == l - 8) {
                 document.getElementById("ruutu" + (l + 8)).innerHTML = "";
                 document.getElementById("liikkeet").innerHTML += "s";
@@ -496,16 +498,19 @@ function uhat() {
 
 
             // TORNI MUSTA UHAT
-            /*if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+            if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
                 if (((document.getElementById("ruutu" + xy(j, i)).firstChild).classList).contains("tornim")) {
                     // x - n
-                    for (xn = j-1; xn <= 0 ; xn--) {
-                        if (i - 1 > 0 && xn - 1 > 0 && !(document.getElementById("ruutu" + xy(xn, i)).hasChildNodes())) {
-                            uhkaruudutm[xy(xn, i)] = 1;
+                    for (xn = j - 1; xn <= 0; xn--) {
+                        if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
+                            if (i - 1 > 0 && xn - 1 > 0 && !(document.getElementById("ruutu" + xy(xn, i)).hasChildNodes())) {
+                                uhkaruudutm[xy(xn, i)] = 1;
+                            }
                         }
                     }
                 }
-            }*/
+            }
+
 
         }
     }
