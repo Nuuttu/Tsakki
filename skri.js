@@ -26,6 +26,10 @@ for (i = 0; i < 8; i++) {
         ruutuxy[i][j] = [j + 1];
     }
 }
+var liikeruudusta = "";
+var liikeruutuun = "";
+var liikkeet = new Array();
+var liikemaara = 0;
 
 // ALUSTAN ALUSTUS
 // Luodaan HTML elementtejä, joista muodostuu lauta
@@ -64,10 +68,15 @@ function alustus() {
     viimenenliike = "";
     lauta2.innerHTML = ruudut2;
     liikelukukerroin = 0;
+    liikeruudusta = "";
+    liikeruutuun = "";
+    liikemaara = 0;
 }
 
 
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 // LIIKKEEN FUNKTIOT
 // DRAG & DROP PAIKKA
@@ -79,98 +88,113 @@ function allowDrop(ev) {
 
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
-    /*
-        console.log(ev.target.id + " ????");
-        console.log(document.getElementById(ev.target.id).parentElement.id);
-    */
     var r = Number(document.getElementById(ev.target.id).parentElement.id.replace('ruutu', ''));
     lahtoruutu = r;
 
 }
 
 function drop(ev) {
+
+    uhat();
+
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
     var r = Number(Number(ev.currentTarget.id.replace('ruutu', '')));
-    var tyyppi = ev.dataTransfer.getData("text");
 
-    console.log(lahtoruutu);
-    console.log(Number(ev.currentTarget.id.replace('ruutu', '')));
+
+    console.log(lahtoruutu + " , " + Number(ev.currentTarget.id.replace('ruutu', '')));
+
+
+    if (saannot(lahtoruutu, r, data)) {
+        // SÄÄNTÖ TSEKKAA KUNINGASRUUDUN, JOS LIIKKUU NIIN, ETTÄ UHKAA RUUTUA LIIKKEEN JÄLKEEN
+        if (!document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasm')) {
+            var mm = document.getElementById("ruutu" + lahtoruutu).innerHTML;
+            document.getElementById("ruutu" + lahtoruutu).innerHTML = "";
+            document.getElementById("ruutu" + r).innerHTML = mm;
+            uhat();
+            document.getElementById("ruutu" + r).innerHTML = "";
+            document.getElementById("ruutu" + lahtoruutu).innerHTML = mm;
+        }    // _______________________________________________________________________________JÄÄÄÄÄTIIIIN TÄHÄN
+        if ( false ) {
+            var mm = document.getElementById("ruutu" + r).innerHTML;
+            document.getElementById("ruutu" + r).innerHTML = "";
+            uhat();
+            document.getElementById("ruutu" + r).innerHTML = mm;
+        }
+        // SÄÄNTÖ ETTÄ KUNINGASTA EI VOIDA SAATTAA UHKAAN LIIKKUMALLA
+        if ( (document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasm') && !document.getElementById("ruutu" + r).classList.contains('uhattuv')) || (!(document.getElementById("drag_km").parentElement.classList.contains("uhattuv")) ) ) {
+
+
+            console.log((document.getElementById("drag_km").parentElement.classList.contains("uhattuv")) + " ONKO kuningasUHAT TOTTA?");
+            console.log("ruutu lähtö: " + document.getElementById("ruutu" + lahtoruutu).id + " ruutu TARGET: " + document.getElementById("ruutu" + r).id);
+
+
+            console.log("Säännöt == true");
+            if (kummanvuoro == "v") {
+                kummanvuoro = "m";
+            } else { kummanvuoro = "v" }
+            // SYÖNTI
+            if ((ev.target.id).includes('drag') && (ev.target.id != ev.dataTransfer.getData("text"))) {
+                ev.currentTarget.innerHTML = "";
+                ev.currentTarget.appendChild(document.getElementById(data));
+                document.getElementById("liikkeet").innerHTML += "s";
+                liikealku(lahtoruutu);
+                r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu', ''));
+                liikeloppu(r);
+                // JOS RUUTU ON SAMA
+            } else if ((ev.target.id == ev.dataTransfer.getData("text"))) {
+            } else {
+                // JOS EI SYÖNYT JA ON TYHJÄ RUUTU
+                ev.target.appendChild(document.getElementById(data));
+                liikealku(lahtoruutu);
+                r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu', ''));
+                liikeloppu(r);
+            }
+        }
+
+
+    }
     /*
     console.log(ev.target.id + " _target.id");
     console.log(ev.target.parentElement.id + " _target.parentElement.id");
     console.log(ev.dataTransfer.getData("text") + " _dataTransfer.getData('text')");
-    */
-    if (saannot(lahtoruutu, r, tyyppi)) {
-
-        console.log("Säännöt palauttivat toden")
-        if (kummanvuoro == "v") {
-            kummanvuoro = "m";
-        } else { kummanvuoro = "v" }
-        // SYÖNTI
-        if ((ev.target.id).includes('drag') && (ev.target.id != ev.dataTransfer.getData("text"))) {
-            ev.currentTarget.innerHTML = "";
-            ev.currentTarget.appendChild(document.getElementById(data));
-            document.getElementById("liikkeet").innerHTML += "s";
-            liikealku(lahtoruutu);
-            r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu', ''));
-            liikeloppu(r);
-            // JOS RUUTU ON SAMA
-        } else if ((ev.target.id == ev.dataTransfer.getData("text"))) {
-        } else {
-            // JOS EI SYÖNYT JA ON TYHJÄ RUUTU
-            ev.target.appendChild(document.getElementById(data));
-            liikealku(lahtoruutu);
-            r = Number(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id.replace('ruutu', ''));
-            liikeloppu(r);
-        }
-    }
-
-    /*
+    
     console.log(ev.dataTransfer.getData("text"));
     console.log(ev.target.appendChild(document.getElementById(data)));
     console.log(document.getElementById(ev.dataTransfer.getData("text")).parentElement.id);
     */
 }
 
+function liiketakaisin() {
 
-// ______________________________________________________________________________________________________
-// ______________________________________________________________________________________________________
+    console.log("liiketakaisin");
+}
+
+function tuleekokuningasuhatuksim() {
+    if ((document.getElementById("drag_km").parentElement.classList.contains("uhattuv"))) {
+
+        return (true);
+    } else { uhat(); return (false); }
+}
+
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 // SAANNOT LÄHES KAIKKI
 // TARKISTAA LIIKKEEN OIKEELLISUUDEN JA KÄY LÄPI SÄÄNTÖJÄ
 
 function saannot(a, l, tyyppi) {
 
-    uhat();
-
-    for (i = 1; i < 65; i++) {
-        //console.log(uhkaruudutm[i]);
-        if (uhkaruudutv[i] == 1) {
-            //document.getElementById("ruutu" + i).style.backgroundColor = "red";
-            document.getElementById("ruutu" + i).classList.add("punainenborder");
-        } else {
-            document.getElementById("ruutu" + i).classList.remove("punainenborder");
-        }
-    }
-
-    for (i = 0; i < 64; i++) {
-        uhkaruudutm[i] = 0;
-        uhkaruudutv[i] = 0;
-    }
-
     // VUOROT
     // VALKOINEN
-    console.log(document.getElementById("ruutu" + a).firstChild.id);
+    console.log(kummanvuoro + ":n vuoro");
     if (kummanvuoro == "v" && document.getElementById("ruutu" + a).firstChild.id.includes('m')) {
         return (false);
     }
-
     // MUSTA
     if (kummanvuoro == "m" && document.getElementById("ruutu" + a).firstChild.id.includes('v')) {
         return (false);
     }
-
     // OMAN SYÖNTI
     // MUSTA
     if (document.getElementById("ruutu" + l).hasChildNodes() && tyyppi.includes('m')) {
@@ -178,7 +202,6 @@ function saannot(a, l, tyyppi) {
             return (false);
         }
     }
-
     // VALKOINEN
     if (document.getElementById("ruutu" + l).hasChildNodes() && tyyppi.includes('v')) {
         if ((document.getElementById("ruutu" + l).firstChild).id.includes('v')) {
@@ -283,8 +306,8 @@ function saannot(a, l, tyyppi) {
 
     //console.log(kuningasliikkunutv + " " + kuningasliikkunutm + " " + torniliikkunutav + " " + torniliikkunuthv + " " + torniliikkunutam + " " + torniliikkunuthm);
 
-// ______________________________________________________________________________________________________
-// ______________________________________________________________________________________________________
+    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
     // KUNINGAS
@@ -292,7 +315,12 @@ function saannot(a, l, tyyppi) {
         // LINNOITUS
         // VALKOINEN H TORNI LINNOITUS
         if ((a - l) == -2 && (((document.getElementById("ruutu" + a).firstChild).classList).contains("kuningasv")) && kuningasliikkunutv == "n" && torniliikkunuthv == "n") {
-            if (!((document.getElementById("ruutu" + (a + 1)).hasChildNodes()) || (document.getElementById("ruutu" + (a + 2)).hasChildNodes()) || (document.getElementById("ruutu" + (a + 3)).hasChildNodes())) && (document.getElementById("ruutu64").firstChild.classList.contains("torniv"))) {
+            if (!((document.getElementById("ruutu" + (a + 1)).hasChildNodes()) ||
+                (document.getElementById("ruutu" + (a + 2)).hasChildNodes())) &&
+                !(((document.getElementById("ruutu" + (a))).classList.contains('uhattum')) ||
+                    ((document.getElementById("ruutu" + (a + 1))).classList.contains('uhattum')) ||
+                    ((document.getElementById("ruutu" + (a + 2))).classList.contains('uhattum'))) &&
+                (document.getElementById("ruutu64").firstChild.classList.contains("torniv"))) {
                 document.getElementById("ruutu64").innerHTML = "";
                 document.getElementById("ruutu" + (a + 1)).innerHTML = "<img src='torni_v.png' class='torniv' draggable='true' ondragstart='drag(event)' id='drag_tv2'></img>";
                 kuningasliikkunutv = "y";
@@ -303,7 +331,13 @@ function saannot(a, l, tyyppi) {
 
         // VALKOINEN A TORNI LINNOITUS
         if ((a - l) == 2 && (((document.getElementById("ruutu" + a).firstChild).classList).contains("kuningasv")) && kuningasliikkunutv == "n" && torniliikkunutav == "n") {
-            if (!((document.getElementById("ruutu" + (a - 1)).hasChildNodes()) || (document.getElementById("ruutu" + (a - 2)).hasChildNodes())) && (document.getElementById("ruutu57").firstChild.classList.contains("torniv"))) {
+            if (!((document.getElementById("ruutu" + (a - 1)).hasChildNodes()) ||
+                (document.getElementById("ruutu" + (a - 2)).hasChildNodes()) ||
+                (document.getElementById("ruutu" + (a - 3)).hasChildNodes())) &&
+                !(((document.getElementById("ruutu" + (a))).classList.contains('uhattum')) ||
+                    ((document.getElementById("ruutu" + (a - 1))).classList.contains('uhattum')) ||
+                    ((document.getElementById("ruutu" + (a - 2))).classList.contains('uhattum'))) &&
+                (document.getElementById("ruutu57").firstChild.classList.contains("torniv"))) {
                 document.getElementById("ruutu57").innerHTML = "";
                 document.getElementById("ruutu" + (a - 1)).innerHTML = "<img src='torni_v.png' class='torniv' draggable='true' ondragstart='drag(event)' id='drag_tv1'></img>";
                 kuningasliikkunutv = "y";
@@ -314,7 +348,13 @@ function saannot(a, l, tyyppi) {
 
         // MUSTA A TORNI LINNOITUS
         if ((a - l) == 2 && (((document.getElementById("ruutu" + a).firstChild).classList).contains("kuningasm")) && kuningasliikkunutm == "n" && torniliikkunutam == "n") {
-            if (!((document.getElementById("ruutu" + (a - 1)).hasChildNodes()) || (document.getElementById("ruutu" + (a - 2)).hasChildNodes())) && (document.getElementById("ruutu1").firstChild.classList.contains("tornim"))) {
+            if (!((document.getElementById("ruutu" + (a - 1)).hasChildNodes()) ||
+                (document.getElementById("ruutu" + (a - 2)).hasChildNodes()) ||
+                (document.getElementById("ruutu" + (a - 3)).hasChildNodes())) &&
+                !(((document.getElementById("ruutu" + (a))).classList.contains('uhattuv')) ||
+                    ((document.getElementById("ruutu" + (a - 1))).classList.contains('uhattuv')) ||
+                    ((document.getElementById("ruutu" + (a - 2))).classList.contains('uhattuv'))) &&
+                (document.getElementById("ruutu1").firstChild.classList.contains("tornim"))) {
                 document.getElementById("ruutu1").innerHTML = "";
                 document.getElementById("ruutu" + (a - 1)).innerHTML = "<img src='torni_m.png' class='torniv' draggable='true' ondragstart='drag(event)' id='drag_tm1'></img>";
                 kuningasliikkunutm = "y";
@@ -325,7 +365,12 @@ function saannot(a, l, tyyppi) {
 
         // MUSTA H TORNI LINNOITUS
         if ((a - l) == -2 && (((document.getElementById("ruutu" + a).firstChild).classList).contains("kuningasm")) && kuningasliikkunutm == "n" && torniliikkunuthm == "n") {
-            if (!((document.getElementById("ruutu" + (a + 1)).hasChildNodes()) || (document.getElementById("ruutu" + (a + 2)).hasChildNodes()) || (document.getElementById("ruutu" + (a + 3)).hasChildNodes())) && (document.getElementById("ruutu8").firstChild.classList.contains("tornim"))) {
+            if (!((document.getElementById("ruutu" + (a + 1)).hasChildNodes()) ||
+                (document.getElementById("ruutu" + (a + 2)).hasChildNodes())) &&
+                !(((document.getElementById("ruutu" + (a))).classList.contains('uhattuv')) ||
+                    ((document.getElementById("ruutu" + (a + 1))).classList.contains('uhattuv')) ||
+                    ((document.getElementById("ruutu" + (a + 2))).classList.contains('uhattuv'))) &&
+                (document.getElementById("ruutu8").firstChild.classList.contains("tornim"))) {
                 document.getElementById("ruutu8").innerHTML = "";
                 document.getElementById("ruutu" + (a + 1)).innerHTML = "<img src='torni_m.png' class='torniv' draggable='true' ondragstart='drag(event)' id='drag_tm2'></img>";
                 kuningasliikkunutm = "y";
@@ -424,7 +469,7 @@ function saannot(a, l, tyyppi) {
     }
 
 
-    
+
 
     // SOTILAS VALKOINEN
     if (((document.getElementById("ruutu" + a).firstChild).classList).contains("sotilasv")) {
@@ -489,15 +534,11 @@ function xyrajat(r, k) {
 
 
 
-
-
-
 // UHKARUUDUT
 function uhat() {
 
-
-    // ______________________________________________________________________________________________________
-    // ______________________________________________________________________________________________________
+    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     // MUSTAN UHKAAMAT RUUDUT
     for (i = 1; i <= 8; i++) {
         for (j = 1; j <= 8; j++) {
@@ -516,7 +557,6 @@ function uhat() {
                     }
                 }
             }
-
 
             // TORNI MUSTA UHAT
             if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
@@ -730,8 +770,8 @@ function uhat() {
                 }
             }
 
-            // ______________________________________________________________________________________________________
-            // ______________________________________________________________________________________________________
+            // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+            // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
             // VALKOISEN UHKAAMAT RUUDUT 
             // SOTILAS VALKOINEN UHAT
             if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
@@ -747,7 +787,6 @@ function uhat() {
                     }
                 }
             }
-
 
             // TORNI VALKOINEN UHAT
             if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
@@ -796,7 +835,6 @@ function uhat() {
                 }
             }
 
-            //console.log(xy(j, i) + " Tarkistettava ruutu");
             // LÄHETTI VALKOINEN UHAT
             if (document.getElementById("ruutu" + xy(j, i)).hasChildNodes()) {
                 if ((document.getElementById("ruutu" + xy(j, i)).firstChild.classList).contains("lahettiv")) {
@@ -962,24 +1000,37 @@ function uhat() {
             }
         }
     }
-}
 
-/*
-// UHKAFUNKTIO
-function onkouhattu(a, l) {
-    if ((document.getElementById("ruutu" + a).firstChild).classList.includes('kuningasm')) {
-        console.log((document.getElementById("ruutu" + l) + " tyyppi"));
 
+    // UHAT RUUDULLA RUUTUINA
+    for (i = 1; i < 65; i++) {
+        if (uhkaruudutm[i] == 1) {
+            document.getElementById("ruutu" + i).classList.add("uhattum");
+        } else {
+            document.getElementById("ruutu" + i).classList.remove("uhattum");
+        }
+    }
+
+    for (i = 1; i < 65; i++) {
+        if (uhkaruudutv[i] == 1) {
+            document.getElementById("ruutu" + i).classList.add("uhattuv");
+        } else {
+            document.getElementById("ruutu" + i).classList.remove("uhattuv");
+        }
+    }
+
+    for (i = 0; i < 64; i++) {
+        uhkaruudutm[i] = 0;
+        uhkaruudutv[i] = 0;
     }
 }
-*/
+
 
 // Ruutu ja koordinaatti vaihdokset
 // ruutujen ID muutetaan x ja y , ja toistepäin
 
-
-// ______________________________________________________________________________________________________
-// ______________________________________________________________________________________________________
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 function xy(x, y) {
     if (typeof x == 'number') {
@@ -1010,7 +1061,8 @@ function rtox(r) {
 }
 
 
-
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
 // LIIKKUMISEN TEKSTIKSI MUUTTAMINEN
@@ -1020,13 +1072,9 @@ var lruutu = "";
 var liikelukukerroin = 0;
 
 function liikealku(ruutu) {
-    var liikkeet = document.getElementById("liikkeet");
     lruutu += aakkoset[rtox(ruutu)] + "" + rtoy(ruutu) + " ";
     liikelukukerroin++;
 
-    /*
-    console.log(ruutu + " " + r_to_x(ruutu) + " " + r_to_y(ruutu) + " " + xy(r_to_x(ruutu), r_to_y(ruutu)));
-    */
 }
 
 function liikeloppu(ruutu) {
@@ -1038,16 +1086,11 @@ function liikeloppu(ruutu) {
         liikkeet.innerHTML += "<br>";
         liikelukukerroin = 0;
     }
-
-
-    /*
-    console.log(ruutu + " " + r_to_x(ruutu) + " " + r_to_y(ruutu) + " " + xy(r_to_x(ruutu), r_to_y(ruutu)));
-    */
 }
 
 
-// ______________________________________________________________________________________________________
-// ______________________________________________________________________________________________________
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 // NAPPULA-ALUSTUKSET
 // määritellään ruudut, mihin nappulat laitetaan
