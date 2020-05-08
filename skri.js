@@ -95,7 +95,7 @@ function drag(ev) {
 
 function drop(ev) {
 
-    uhat();
+
 
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
@@ -107,27 +107,41 @@ function drop(ev) {
 
     if (saannot(lahtoruutu, r, data)) {
         // SÄÄNTÖ TSEKKAA KUNINGASRUUDUN, JOS LIIKKUU NIIN, ETTÄ UHKAA RUUTUA LIIKKEEN JÄLKEEN
-        if (!document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasm')) {
-            var mm = document.getElementById("ruutu" + lahtoruutu).innerHTML;
+        // KUNINKAAN UHKAPÄIVITYS LIIKKEEN JÄLKEEN
+        if (!document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasm') && !document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasv')) {
+            var mml = document.getElementById("ruutu" + lahtoruutu).innerHTML;
+            var mmr = document.getElementById("ruutu" + r).innerHTML;
             document.getElementById("ruutu" + lahtoruutu).innerHTML = "";
-            document.getElementById("ruutu" + r).innerHTML = mm;
+            document.getElementById("ruutu" + r).innerHTML = mml;
             uhat();
-            document.getElementById("ruutu" + r).innerHTML = "";
-            document.getElementById("ruutu" + lahtoruutu).innerHTML = mm;
-        }    // _______________________________________________________________________________JÄÄÄÄÄTIIIIN TÄHÄN
-        if ( false ) {
-            var mm = document.getElementById("ruutu" + r).innerHTML;
-            document.getElementById("ruutu" + r).innerHTML = "";
-            uhat();
-            document.getElementById("ruutu" + r).innerHTML = mm;
+            document.getElementById("ruutu" + r).innerHTML = mmr;
+            document.getElementById("ruutu" + lahtoruutu).innerHTML = mml;
         }
-        // SÄÄNTÖ ETTÄ KUNINGASTA EI VOIDA SAATTAA UHKAAN LIIKKUMALLA
-        if ( (document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasm') && !document.getElementById("ruutu" + r).classList.contains('uhattuv')) || (!(document.getElementById("drag_km").parentElement.classList.contains("uhattuv")) ) ) {
+        // KUNINKAAN OMA LIIKEPÄIVITYS UHKATILANTEESEEN TAI -TILANTEESTA
+        if (document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasm') || document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasv')) {
+            var mml = document.getElementById("ruutu" + lahtoruutu).innerHTML;
+            var mmr = document.getElementById("ruutu" + r).innerHTML;
+            document.getElementById("ruutu" + lahtoruutu).innerHTML = "";
+            document.getElementById("ruutu" + r).innerHTML = mml;
+            uhat();
+            document.getElementById("ruutu" + r).innerHTML = mmr;
+            document.getElementById("ruutu" + lahtoruutu).innerHTML = mml;
+        }
 
+        // UHKASÄÄNTÖTSEKIT
+        if ((!(document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasm')
+            && (document.getElementById("ruutu" + r).classList.contains('uhattuv'))
+            && !(document.getElementById("drag_km").classList.contains('uhattuv')))
+            || (!(document.getElementById("drag_km").parentElement.classList.contains("uhattuv"))
+                && !document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasm')))
+            &&
+            (!(document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasv')
+                && (document.getElementById("ruutu" + r).classList.contains('uhattum')))
+                || (!(document.getElementById("drag_kv").parentElement.classList.contains("uhattum"))
+                    && !document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasv')))) {
 
-            console.log((document.getElementById("drag_km").parentElement.classList.contains("uhattuv")) + " ONKO kuningasUHAT TOTTA?");
-            console.log("ruutu lähtö: " + document.getElementById("ruutu" + lahtoruutu).id + " ruutu TARGET: " + document.getElementById("ruutu" + r).id);
-
+            // console.log((document.getElementById("drag_km").parentElement.classList.contains("uhattuv")) + " ONKO kuningasUHAT TOTTA?");
+            // console.log("Lähtö: " + document.getElementById("ruutu" + lahtoruutu).id + " TARGET: " + document.getElementById("ruutu" + r).id);
 
             console.log("Säännöt == true");
             if (kummanvuoro == "v") {
@@ -152,8 +166,10 @@ function drop(ev) {
             }
         }
 
+        uhat();
 
     }
+
     /*
     console.log(ev.target.id + " _target.id");
     console.log(ev.target.parentElement.id + " _target.parentElement.id");
@@ -170,12 +186,7 @@ function liiketakaisin() {
     console.log("liiketakaisin");
 }
 
-function tuleekokuningasuhatuksim() {
-    if ((document.getElementById("drag_km").parentElement.classList.contains("uhattuv"))) {
 
-        return (true);
-    } else { uhat(); return (false); }
-}
 
 // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -1003,20 +1014,31 @@ function uhat() {
 
 
     // UHAT RUUDULLA RUUTUINA
+    // MUSTAN UHAT
     for (i = 1; i < 65; i++) {
         if (uhkaruudutm[i] == 1) {
             document.getElementById("ruutu" + i).classList.add("uhattum");
         } else {
             document.getElementById("ruutu" + i).classList.remove("uhattum");
         }
+        if (document.getElementById("ruutu" + i).hasChildNodes() && uhkaruudutm[i] == 1) {
+            if ((document.getElementById("ruutu" + i).firstChild.classList).contains("kuningasv")) {
+                document.getElementById("ruutu" + i).classList.add("punainenborder");
+            }
+        } else { document.getElementById("ruutu" + i).classList.remove("punainenborder"); }
     }
-
+    // VALKOISEN UHAT
     for (i = 1; i < 65; i++) {
         if (uhkaruudutv[i] == 1) {
             document.getElementById("ruutu" + i).classList.add("uhattuv");
         } else {
             document.getElementById("ruutu" + i).classList.remove("uhattuv");
         }
+        if (document.getElementById("ruutu" + i).hasChildNodes() && uhkaruudutv[i] == 1) {
+            if ((document.getElementById("ruutu" + i).firstChild.classList).contains("kuningasm")) {
+                document.getElementById("ruutu" + i).classList.add("punainenborder");
+            }
+        } else { document.getElementById("ruutu" + i).classList.remove("punainenborder"); }
     }
 
     for (i = 0; i < 64; i++) {
