@@ -20,6 +20,7 @@ var uhkaruudutv = new Array(64);
 for (i = 0; i < 64; i++) {
     uhkaruudutv[i] = 0;
 }
+// turha matriisi
 for (i = 0; i < 8; i++) {
     ruutuxy[i] = [i + 1];
     for (j = 0; j < 8; j++) {
@@ -128,6 +129,18 @@ function drop(ev) {
             document.getElementById("ruutu" + lahtoruutu).innerHTML = mml;
         }
 
+        if (document.getElementById("ruutu" + r).hasChildNodes()) {
+            if (document.getElementById("ruutu" + r).firstChild.classList.contains("kuningasm")) {
+                alert("VALKOINEN VOITTI");
+            }
+        }
+
+        if (document.getElementById("ruutu" + r).hasChildNodes()) {
+            if (document.getElementById("ruutu" + r).firstChild.classList.contains("kuningasv")) {
+                alert("MUSTA VOITTI");
+            }
+        }
+
         // UHKASÄÄNTÖTSEKIT
         if ((!(document.getElementById("ruutu" + lahtoruutu).firstChild.classList.contains('kuningasm')
             && (document.getElementById("ruutu" + r).classList.contains('uhattuv'))
@@ -234,7 +247,6 @@ function saannot(a, l, tyyppi) {
             }
         }
     }
-
     // YLÖS
     if (((a - l) % 8 == 0) && (a - l > 0)) {
         for (i = 1; i < (Math.abs(rtoy(a) - rtoy(l))); i++) {
@@ -243,7 +255,6 @@ function saannot(a, l, tyyppi) {
             }
         }
     }
-
     // OIKEA
     if (rtoy(a) == rtoy(l) && (a < l)) {
         for (i = 1; i < (Math.abs(rtox(a) - rtox(l))); i++) {
@@ -252,7 +263,6 @@ function saannot(a, l, tyyppi) {
             }
         }
     }
-
     // VASEN
     if (rtoy(a) == rtoy(l) && (l < a)) {
         for (i = 1; i < (Math.abs(rtox(a) - rtox(l))); i++) {
@@ -262,14 +272,6 @@ function saannot(a, l, tyyppi) {
         }
     }
 
-    // VIISTOT  KOILLINEN
-    //if (Math.abs(rtoy(a)) - Math.abs(rtoy(l)) == Math.abs(rtox(a)) - Math.abs(rtox(l))) {
-    //console.log( ((rtox(a) + " " + rtox(l)) ) + " " + ((rtoy(a) + " " +  rtoy(l)) ));
-    //console.log( ((rtox(a) - rtox(l)) == 1) + " " + ((rtoy(a) - rtoy(l)) == 1 ));
-    //console.log( ((a - l) > 0) && ((a - l) % 7) == 0);
-    //console.log((Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) / 2);
-
-
     // VIISTOT KOILLINEN
     if (((a - l) > 0) && ((a - l) % 7) == 0 && a != 64 && (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) % 2 == 0) {
         for (i = 1; i < (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) / 2; i++) {
@@ -278,7 +280,6 @@ function saannot(a, l, tyyppi) {
             }
         }
     }
-
     // VIISTOT LOUNAS
     if (((a - l) < 0) && ((a - l) % 7) == 0 && a != 1 && (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) % 2 == 0) {
         for (i = 1; i < (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) / 2; i++) {
@@ -287,7 +288,6 @@ function saannot(a, l, tyyppi) {
             }
         }
     }
-
     // VIISTOT KAAKKO
     if (((a - l) < 0) && ((a - l) % 9) == 0 && (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) % 2 == 0) {
         for (i = 1; i < (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) / 2; i++) {
@@ -296,7 +296,6 @@ function saannot(a, l, tyyppi) {
             }
         }
     }
-
     // VIISTOT LUODE
     if (((a - l) > 0) && ((a - l) % 9) == 0 && (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) % 2 == 0) {
         for (i = 1; i < (Math.abs(Math.abs(rtoy(a)) - Math.abs(rtoy(l))) + Math.abs(Math.abs(rtox(a)) - Math.abs(rtox(l)))) / 2; i++) {
@@ -314,12 +313,9 @@ function saannot(a, l, tyyppi) {
     // viisto kaakko        x++ y--  =  r + 9
     // viisto lounas        x-- y--  =  r + 7
     // viisto luode         x-- y++  =  r - 9
-
     //console.log(kuningasliikkunutv + " " + kuningasliikkunutm + " " + torniliikkunutav + " " + torniliikkunuthv + " " + torniliikkunutam + " " + torniliikkunuthm);
-
     // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
 
     // KUNINGAS
     if (((document.getElementById("ruutu" + a).firstChild).classList).contains("kuningasv") || ((document.getElementById("ruutu" + a).firstChild).classList).contains("kuningasm")) {
